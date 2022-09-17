@@ -1,6 +1,6 @@
 class Solution {
     public List<List<Integer>> palindromePairs(String[] words) {
-            HashMap<String,Integer> wordMap = new HashMap<>();
+        HashMap<String,Integer> wordMap = new HashMap<>();
         Set<Integer> set = new TreeSet<>();
         int n = words.length;
         
