@@ -30,11 +30,10 @@ class Solution {
                 return;
             }
         }
-        
-            subAns.add(root.val);
-            getAns(root.left,target,sum,ans,subAns);
-            getAns(root.right,target,sum,ans,subAns);
-            subAns.remove(subAns.size()-1);
+        subAns.add(root.val);
+        getAns(root.left,target,sum,ans,subAns);
+        getAns(root.right,target,sum,ans,subAns);
+        subAns.remove(subAns.size()-1);
         
     }
 }
