@@ -1,7 +1,7 @@
 class Solution {
     public int numSubarrayBoundedMax(int[] nums, int left, int right) {
         int lastBreak = -1;
-        //记录上一个元素动态规划的结果
+
         int lastCount = 0;
         int res = 0;
         
