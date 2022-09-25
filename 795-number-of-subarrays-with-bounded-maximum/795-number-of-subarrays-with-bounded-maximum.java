@@ -1,22 +1,24 @@
 class Solution {
     public int numSubarrayBoundedMax(int[] nums, int left, int right) {
-        int i = 0;
-        int j = 0;
-        int ans = 0;
-        int smaller=0;
+        int lastBreak = -1;
+        //记录上一个元素动态规划的结果
+        int lastCount = 0;
+        int res = 0;
         
-        while(i!=nums.length){
-            if(nums[i]>=left && nums[i]<=right){
-                smaller=i-j+1;
-                ans+=smaller;
-            }else if(nums[i]<left){
-                ans+=smaller;
-            }else{
-                j=i+1;
-                smaller=0;
+        for(int i = 0; i < nums.length; ++i){
+            if(nums[i] > right){
+                lastBreak = i;
+                lastCount = 0;
             }
-            i++;
+            else if(nums[i] < left){
+                res += lastCount;
+            }
+            else{
+                lastCount = i - lastBreak;
+                res += lastCount;
+            }
         }
-        return ans;
+        
+        return res;
     }
 }
