@@ -14,3 +14,5 @@ class Solution {
         return false;
     }
 }
+
+// In this we have to calculate the mod of the sum store it in the hashmap, and if we find any mod value repeating than it means we have got the sum equal to K (this is the reason why wwe are getting the same reminder back) => than we will check the diff betweeen the occurence if it is greater that 1 than it is valid if it is not than return false; :) //
