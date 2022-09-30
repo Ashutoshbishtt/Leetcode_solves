@@ -1,34 +1,60 @@
 class Solution {
-    static int[] f = new int[11];
-    static {
-        f[0] = f[1] = 1;
-        for (int i = 2; i <= 10; ++i) f[i] = i * f[i - 1];
-    }
     public int countSpecialNumbers(int n) {
-        char[] cs = ("" + n).toCharArray();
-        int m = cs.length, res = 0;
-        for (int i = 1, j = 9, k = 9; i < m; ++i) {
-            if (1 == i) res += 9;
-            else {
-                k *= j--;
-                res += k;
-            }
+        String sn = "" + n;
+        int len = sn.length();
+        if(len == 1)
+            return n;
+        int[] d = new int[len];
+        for(int i = 0; i < len; i++)
+            d[i] = (int)(sn.charAt(i) - '0');
+        
+        int res = 0;
+        for(int i = 1; i <= len - 1; i++) {
+            res += 9 * compute(i);
         }
-        boolean valid = true;
-        boolean[] seen = new boolean[10];
-        for (int i = 0; i < m; ++i) {
-            int hi = cs[i] - '0';       
-            if (seen[hi]) valid = false;
-            int cn = 9 - i, cm = m - i - 1, cnt = 0;
-            for (int j = 0; j < hi; ++j) {
-                if (0 == i && 0 == j) continue;
-                if (!seen[j]) cnt++;
+        
+        Set<Integer> set = new HashSet<>();
+        for(int i = 0; i < len; i++) {
+            if(set.size() < i)
+                break;
+            
+            int c = d[i];
+            if(i == 0)
+                c--;
+            else if(i == len - 1)
+                c++;
+            
+            // System.out.println("c = " + c);
+            for(int j = 0; j < i; j++) {
+                if(d[i] > d[j])
+                    c--;
+                else if(d[i] == d[j] && i == len - 1)
+                    c--;
             }
-            res += cnt * f[cn] / f[cn - cm];
-            if (!valid) break;
-            seen[hi] = true;              
+                
+            
+            // System.out.println("c1 = " + c);
+            int v = 1;
+            if(i + 1 < len) {
+                for(int a = 0; a < len - i - 1; a++) {
+                    v *= (9 - i - a);
+                }
+            }
+            res += c * v;
+            // System.out.println("res = " + res);
+            
+            set.add(d[i]);
         }
-        if (valid) res++;
         return res;
+    }
+    
+    private int compute(int i) {
+        int v = 1;
+        int s = 9;
+        for(int k = 0; k < i - 1; k++) {
+            v *= s;
+            s--;
+        }
+        return v;
     }
 }
