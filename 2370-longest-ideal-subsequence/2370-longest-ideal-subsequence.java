@@ -1,25 +1,26 @@
 class Solution {
     public int longestIdealString(String s, int k) {
-        int n = s.length();
-        int dp[][] = new int[n][26];
-        
-        for(int i = 0 ; i < n ; i++){
-            Arrays.fill(dp[i],-1);
+        int[][] dp = new int[s.length()][27];
+        for (int i = 0; i < s.length(); i++) {
+            for (int j = 0; j < 27; j++) {
+                dp[i][j] = -1;
+            }
         }
-        return fun(0,(char)(0),0,n,s,k,dp);
+        return dfs(s, 0, k, 26, dp);
     }
-    
-    private int fun(int pick , char par , int ind , int n , String s , int k , int[][] dp){
-        if(ind==n)return 0;
-        if(pick==1 && dp[ind][par-'a']!=-1)return dp[ind][par-'a'];
-
-        int notTake = fun(pick,par,ind+1,n,s,k,dp);
-        int take = 0;
-        if(pick==0 || Math.abs(par-s.charAt(ind))<=k){
-            take = 1+fun(1,s.charAt(ind),ind+1,n,s,k,dp);
+    public int dfs(String s, int currentPosition, int k, int previousChar, int[][] dp) {
+        if (currentPosition >= s.length()) {
+            return 0;
         }
-        int temp = Math.max(notTake,take);
-        if(pick==1)dp[ind][par-'a']=temp;
-        return temp;
+        if (dp[currentPosition][previousChar] != -1) {
+            return dp[currentPosition][previousChar];
+        }
+        int currentChar = s.charAt(currentPosition) - 'a';
+        int result = dfs(s, currentPosition + 1, k, previousChar, dp);
+        if (previousChar == 26 || Math.abs(currentChar - previousChar) <= k) {
+            result = Math.max(result, 1 + dfs(s, currentPosition + 1, k, currentChar, dp));
+        }
+        dp[currentPosition][previousChar] = result;
+        return result;
     }
 }
