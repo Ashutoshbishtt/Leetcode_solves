@@ -1,34 +1,40 @@
 class FoodRatings {
-HashMap<String, TreeSet<String>> cuiToFood = new HashMap();
-    HashMap<String, Integer> foodToRat = new HashMap();
-    HashMap<String, String> foodToCui = new HashMap();
-    public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {
-        for(int i = 0; i < foods.length; i++){
-            TreeSet<String> foodOfThisCuisine = cuiToFood.getOrDefault(cuisines[i], new TreeSet<String> ((a,b)->
-            foodToRat.get(a).equals(foodToRat.get(b)) ? a.compareTo(b) : foodToRat.get(b)-foodToRat.get(a)));
-			
 
-            
-            foodToRat.put(foods[i], ratings[i]);
-            foodOfThisCuisine.add(foods[i]);
-            foodToCui.put(foods[i], cuisines[i]);    
-            
-            cuiToFood.put(cuisines[i], foodOfThisCuisine);
+    // create map that maps cuisine to maps of ratings
+    Map<String,TreeMap<Integer,TreeSet<String>>> cuisineToRatings;
+    Map<String,Integer> foodToRating;
+    Map<String,String> foodToCuisine;
+    public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {
+        cuisineToRatings = new HashMap<>();
+        foodToRating = new HashMap<>();
+        foodToCuisine = new HashMap<>();
+        for (int i=0; i < foods.length; i++) {
+            foodToRating.put(foods[i], ratings[i]);
+            foodToCuisine.put(foods[i], cuisines[i]);
+            cuisineToRatings.computeIfAbsent(cuisines[i], k -> new TreeMap<>((r1, r2) ->                           Integer.compare(r2, r1)));
+            cuisineToRatings.get(cuisines[i]).computeIfAbsent(ratings[i], k -> new TreeSet<>());
+            cuisineToRatings.get(cuisines[i]).get(ratings[i]).add(foods[i]);
         }
     }
     
-
     public void changeRating(String food, int newRating) {
-        String cui = foodToCui.get(food);
-        TreeSet<String> foodOfThisCui = cuiToFood.get(cui);
-        foodOfThisCui.remove(food);
-        foodToRat.put(food, newRating);
         
-        foodOfThisCui.add(food);
-        cuiToFood.put(cui, foodOfThisCui);
+        int curRating = foodToRating.get(food);
+        String cuisine = foodToCuisine.get(food);
+        // remove existing food in cuisineToRatings map
+        cuisineToRatings.get(cuisine).get(curRating).remove(food);
+        if (cuisineToRatings.get(cuisine).get(curRating).isEmpty()) {
+            cuisineToRatings.get(cuisine).remove(curRating);
+        }
+        // now to update
+        foodToRating.put(food, newRating);
+        cuisineToRatings.get(cuisine).computeIfAbsent(newRating, k -> new TreeSet<>());
+        cuisineToRatings.get(cuisine).get(newRating).add(food);
+        // time=O(log(n)), n is len of foods
     }
     
     public String highestRated(String cuisine) {
-        return cuiToFood.get(cuisine).first();
+        // read time=O(1)
+        return cuisineToRatings.get(cuisine).firstEntry().getValue().first();
     }
 }
