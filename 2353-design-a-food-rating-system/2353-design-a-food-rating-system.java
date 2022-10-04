@@ -21,20 +21,20 @@ class FoodRatings {
         
         int curRating = foodToRating.get(food);
         String cuisine = foodToCuisine.get(food);
-        // remove existing food in cuisineToRatings map
+
         cuisineToRatings.get(cuisine).get(curRating).remove(food);
         if (cuisineToRatings.get(cuisine).get(curRating).isEmpty()) {
             cuisineToRatings.get(cuisine).remove(curRating);
         }
-        // now to update
+
         foodToRating.put(food, newRating);
         cuisineToRatings.get(cuisine).computeIfAbsent(newRating, k -> new TreeSet<>());
         cuisineToRatings.get(cuisine).get(newRating).add(food);
-        // time=O(log(n)), n is len of foods
+
     }
     
     public String highestRated(String cuisine) {
-        // read time=O(1)
+
         return cuisineToRatings.get(cuisine).firstEntry().getValue().first();
     }
 }
