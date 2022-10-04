@@ -1,6 +1,6 @@
 class FoodRatings {
 
-    // create map that maps cuisine to maps of ratings
+
     Map<String,TreeMap<Integer,TreeSet<String>>> cuisineToRatings;
     Map<String,Integer> foodToRating;
     Map<String,String> foodToCuisine;
