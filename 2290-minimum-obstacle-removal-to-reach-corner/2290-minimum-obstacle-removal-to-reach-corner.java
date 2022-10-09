@@ -25,9 +25,7 @@ class Solution {
             int y = cur[1];
             int currCost = cur[2];
 
-            if (x == m - 1 && y == n - 1) {
-                return currCost;
-            }
+            
 
             for (int[] dir : directions) {
                 int nextX = x + dir[0];
