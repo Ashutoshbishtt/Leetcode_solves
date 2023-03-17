@@ -1,70 +1,43 @@
-class Node {
-    Node links[] = new Node[26];
-    boolean flag = false;
-
-    public Node() {}
-
-    boolean containsKey(char ch) {
-        return (links[ch - 'a'] != null);
-    }
-
-    Node get(char ch) {
-        return links[ch - 'a'];
-    }
-
-    void put(char ch, Node node) {
-        links[ch - 'a'] = node;
-    }
-
-    void setEnd() {
-        flag = true;
-    }
-
-    boolean isEnd() {
-        return flag;
-    }
-}
-
 class Trie {
-    private static Node root;
+    Trie[] children;
+    boolean isEnd;
 
     public Trie() {
-        root = new Node();
+        this.children = new Trie[26];
     }
 
     public void insert(String word) {
-        Node node = root;
-        for (int i = 0; i < word.length(); i++) {
-            if (!node.containsKey(word.charAt(i))) {
-                node.put(word.charAt(i),new Node());
-            }
-            node = node.get(word.charAt(i));
+        Trie curr = this;
+        for (char ch : word.toCharArray()) {
+            int index = ch - 'a';
+            if (curr.children[index] == null) curr.children[index] = new Trie();
+
+            curr = curr.children[index];
         }
-        node.setEnd();
+        curr.isEnd = true;
     }
 
     public boolean search(String word) {
-        Node node = root;
-        for (int i = 0; i < word.length(); i++) {
-            if (!node.containsKey(word.charAt(i))) {
-                return false;
-            }
-            node = node.get(word.charAt(i));
+        Trie curr = this;
+        for (char ch : word.toCharArray()) {
+            int index = ch - 'a';
+            if (curr.children[index] == null) return false;
+            curr = curr.children[index];
         }
-        if (node.isEnd()) {
-            return true;
-        }
-        return false;
+
+        return curr.isEnd;
     }
 
-    public boolean startsWith(String prefix) {
-        Node node = root;
-        for (int i = 0; i < prefix.length(); i++) {
-            if (!node.containsKey(prefix.charAt(i))) {
-                return false;
-            }
-            node = node.get(prefix.charAt(i));
+    public boolean startsWith(String word) {
+        Trie curr = this;
+        for (char ch : word.toCharArray()) {
+            int index = ch - 'a';
+
+            if (curr.children[index] == null) return false;
+
+            curr = curr.children[index];
         }
+
         return true;
     }
 }
@@ -74,4 +47,10 @@ class Trie {
  * obj.insert(word);
  * boolean param_2 = obj.search(word);
  * boolean param_3 = obj.startsWith(prefix);
+ */
+/*
+
+
+
+
  */
