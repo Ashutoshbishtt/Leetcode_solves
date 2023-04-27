@@ -10,7 +10,6 @@ class Solution {
                         int low = j + 1;
                         int high = nums.length - 1;
 
-                        //to prevent integer overflow
                         long sum = nums[i] + nums[j];
                         long val = ((long) target - sum);
 
