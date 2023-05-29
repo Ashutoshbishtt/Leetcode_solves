@@ -1,5 +1,5 @@
 class ParkingSystem {
-int big, medium, small;
+    int big, medium, small;
     public ParkingSystem(int big, int medium, int small) {
         this.big=big;
         this.medium=medium;
